@@ -136,12 +136,6 @@ const IonicApp: React.FC = () => {
   }, [])
 
   useEffect(() => {
-    if (longitude || latitude) {
-      showAlert(`lat: ${latitude}, lon: ${longitude}`)
-    }
-  }, [latitude, longitude])
-
-  useEffect(() => {
     loadUserData()
     loadNotifications()
   }, [])
