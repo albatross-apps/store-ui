@@ -16,9 +16,3 @@ This is the repository for the frontend of the [pwa store](https://progressapp.s
 
 The pwa store uses the [Ionic 5.0](https://github.com/ionic-team/ionic) framework to inforce a mobile first experience.
 
-## Development
-
-Please look at the [project page](https://github.com/mattruddy/store-ui/projects/1) to find tasks assigned to you **or** request to work on one by **commenting** in the [issue](https://github.com/mattruddy/store-ui/issues) you would like to work on.
-
-- [Setting up your Dev Environment](https://github.com/mattruddy/store-ui/wiki/Development-Environment)
-- [Contributing Guidelines](https://github.com/mattruddy/store-ui/wiki/Task-Workflow)
