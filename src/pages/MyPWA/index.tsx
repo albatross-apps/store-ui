@@ -43,7 +43,6 @@ import "./styles.css"
 import StarsListModal from "../../components/StarsListModal"
 import { thunkAddRating } from "../../redux/PWAs/actions"
 import { Axios } from "../../redux/Actions"
-import DevLogCard from "../../components/DevLogCard"
 
 const MyPWA: React.FC = () => {
   const [showPopover, setShowPopover] = useState<boolean>(false)
@@ -291,11 +290,7 @@ const MyPWA: React.FC = () => {
                 />
               </IonCol>
             )}
-            <IonCol
-              size="12"
-              sizeMd={devLogs.length > 0 ? "6" : "12"}
-              pushMd={devLogs.length > 0 ? "6" : "0"}
-            >
+            <IonCol size="12">
               {renderScreenshots}
               {isEdit && (
                 <ImageUploader
@@ -315,18 +310,6 @@ const MyPWA: React.FC = () => {
                 />
               )}
             </IonCol>
-            {devLogs.length > 0 && (
-              <IonCol size="12" sizeMd="6" pullMd="6">
-                {devLogs.map((log, idx) => (
-                  <DevLogCard
-                    key={idx}
-                    devLog={log}
-                    onDelete={handleRemoveDevLog}
-                    isLinkable={false}
-                  />
-                ))}
-              </IonCol>
-            )}
           </IonRow>
         </IonGrid>
       </IonContent>

@@ -39,8 +39,8 @@ const About: React.FC = () => (
               Matthew Ruddy
             </IonRouterLink>
           </IonCardTitle>
-          <a href="mailto:matt@progressiveapp.store">
-            matt@progressiveapp.store
+          <a href="mailto:mjruddy94@gmail.com">
+            mjruddy94@gmail.com
           </a>
         </IonCardHeader>
         <IonCardContent>
@@ -60,7 +60,7 @@ const About: React.FC = () => (
               Adam Geiger
             </IonRouterLink>
           </IonCardTitle>
-          <a href="mailto:ag@progressiveapp.store">ag@progressiveapp.store</a>
+          <a href="mailto:ajg5629@gmail.com">ajg5629@gmail.com</a>
         </IonCardHeader>
         <IonCardContent>
           <img

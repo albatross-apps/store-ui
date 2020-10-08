@@ -30,8 +30,6 @@ import { useSelector, shallowEqual, useDispatch } from "react-redux"
 import { PWA as PWAType, DevLog, NewRating } from "../../util/types"
 import StarsListModal from "../../components/StarsListModal"
 import { Axios } from "../../redux/Actions"
-import DevLogCard from "../../components/DevLogCard"
-import { thunkRemoveDevLog } from "../../redux/User/actions"
 import moment from "moment"
 import { sortDate } from "../../util"
 
@@ -51,7 +49,6 @@ const PWA: React.FC<OwnProps> = ({
   const [notFound, setNotFound] = useState<boolean>(false)
   const [hasFetchedRatings, setHasFetchedRatings] = useState<boolean>(false)
   const [isOpen, setIsOpen] = useState<boolean>(false)
-  const [devLogs, setDevLogs] = useState<DevLog[]>([])
 
   const findPWA = (pwas: PWAType[]) =>
     pwas.find((x) => {
@@ -87,10 +84,6 @@ const PWA: React.FC<OwnProps> = ({
     async (username: string) => dispatch(thunkGetDev(username)),
     [dispatch]
   )
-  const deleteDevLog = useCallback(
-    (logId: number) => dispatch(thunkRemoveDevLog(logId)),
-    [dispatch]
-  )
 
   useEffect(() => {
     ;(async () => {
@@ -121,20 +114,6 @@ const PWA: React.FC<OwnProps> = ({
   }, [])
 
   useEffect(() => {
-    if (pwa) {
-      ;(async () => {
-        const resp = await (await Axios()).get(
-          `${isLoggedIn ? "secure" : "public"}/dev-logs/app/${pwa.appId}`
-        )
-        setDevLogs(resp.data as DevLog[])
-      })()
-    }
-    return () => {
-      setDevLogs([])
-    }
-  }, [pwa, isLoggedIn])
-
-  useEffect(() => {
     if (!pwa) return
     if (
       !hasFetchedRatings &&
@@ -145,45 +124,6 @@ const PWA: React.FC<OwnProps> = ({
       getRatings(pwa.appId)
     }
   }, [pwa, hasFetchedRatings])
-
-  const handleRemoveDevLog = (logId: number) => {
-    deleteDevLog(logId)
-    setDevLogs((prev) => prev.filter((x) => x.logId !== logId))
-  }
-
-  const handleLike = async (logId: number) => {
-    const resp = await (await Axios()).post(`secure/log/${logId}`)
-    const like = resp.data as NewRating
-    const devLog = devLogs.find((x) => x.logId === logId)
-    let nDevLog: DevLog
-    if (devLog) {
-      if (like.liked) {
-        nDevLog = {
-          ...devLog,
-          appLikes: {
-            hasRated: like.liked,
-            ratings: [like.rating, ...devLog.appLikes.ratings],
-          },
-        } as DevLog
-      } else {
-        nDevLog = {
-          ...devLog,
-          appLikes: {
-            hasRated: like.liked,
-            ratings: devLog.appLikes.ratings.filter(
-              (x) => x.from.toLowerCase() !== username.toLowerCase()
-            ),
-          },
-        } as DevLog
-      }
-      setDevLogs((prev) =>
-        prev
-          .filter((x) => x.logId !== logId)
-          .concat(nDevLog)
-          .sort((a, b) => sortDate(a.loggedAt, b.loggedAt))
-      )
-    }
-  }
 
   return (
     <IonPage>
@@ -215,8 +155,6 @@ const PWA: React.FC<OwnProps> = ({
                 </IonCol>
                 <IonCol
                   size="12"
-                  sizeMd={devLogs.length > 0 ? "6" : "12"}
-                  pushMd={devLogs.length > 0 ? "6" : "0"}
                 >
                   <IonCard className="line-around">
                     <IonCardContent>
@@ -224,19 +162,6 @@ const PWA: React.FC<OwnProps> = ({
                     </IonCardContent>
                   </IonCard>
                 </IonCol>
-                {devLogs.length > 0 && (
-                  <IonCol size="12" sizeMd="6" pullMd="6">
-                    {devLogs.map((log, idx) => (
-                      <DevLogCard
-                        key={idx}
-                        devLog={log}
-                        isLinkable={false}
-                        onDelete={handleRemoveDevLog}
-                        onLike={handleLike}
-                      />
-                    ))}
-                  </IonCol>
-                )}
               </Fragment>
             ) : (
               notFound && (

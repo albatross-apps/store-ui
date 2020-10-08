@@ -16,15 +16,18 @@
 }
 
 .AppsColContainer {
-  height: calc(100vh - 150px);
-  overflow-y: auto;
+  /* height: calc(100vh - 150px);
+  overflow-y: hidden;
   overflow-x: hidden;
-  position: sticky;
+  position: sticky; */
   top: -40px;
 }
 
-@media screen and (max-width: 768px) {
-  .AppsCol {
-    display: none;
-  }
+.FooterNote {
+  margin-left: 16px;
+  margin-right: 16px;
+  margin-bottom: 16px;
+  color: var(--ion-color-primary)
 }
+
+

@@ -12,7 +12,8 @@ import {
   IonInfiniteScroll,
   IonInfiniteScrollContent,
   IonTitle,
-} from "@ionic/react";
+  IonFooter,
+} from "@ionic/react"
 import React, {
   useCallback,
   useEffect,
@@ -20,37 +21,37 @@ import React, {
   useRef,
   memo,
   useState,
-} from "react";
-import ReactGA from "react-ga";
-import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { AddToHomeScreen } from "../../components";
-import HidingHeader from "../../components/HidingHeader";
-import HomeRow from "../../components/HomeRow";
-import { useAddToHomescreenPrompt } from "../../hooks/useAddToHomescreenPrompt";
-import { thunkGetHomeData } from "../../redux/PWAs/actions";
-import { ReduxCombinedState } from "../../redux/RootReducer";
-import "./styles.css";
-import { useHidingHeader } from "../../hooks/useHidingHeader";
+} from "react"
+import ReactGA from "react-ga"
+import { shallowEqual, useDispatch, useSelector } from "react-redux"
+import { AddToHomeScreen } from "../../components"
+import HidingHeader from "../../components/HidingHeader"
+import HomeRow from "../../components/HomeRow"
+import { useAddToHomescreenPrompt } from "../../hooks/useAddToHomescreenPrompt"
+import { thunkGetHomeData } from "../../redux/PWAs/actions"
+import { ReduxCombinedState } from "../../redux/RootReducer"
+import "./styles.css"
+import { useHidingHeader } from "../../hooks/useHidingHeader"
 import {
   thunkSetDarkMode,
   thunkLoadFollowedDevLogs,
   thunkAddDevLog,
   thunkRemoveDevLog,
   thunkAddLogLike,
-} from "../../redux/User/actions";
-import { sunny, moon } from "ionicons/icons";
-import DevLogCard from "../../components/DevLogCard";
-import DevLogForm from "../../components/DevLogForm";
-import { DevLog } from "../../util/types";
-import { Axios } from "../../redux/Actions";
+} from "../../redux/User/actions"
+import { sunny, moon, heart } from "ionicons/icons"
+import DevLogCard from "../../components/DevLogCard"
+import DevLogForm from "../../components/DevLogForm"
+import { DevLog } from "../../util/types"
+import { Axios } from "../../redux/Actions"
 
 const Home: React.FC = () => {
-  const content = useRef<any>();
-  const [prompt, promptToInstall] = useAddToHomescreenPrompt();
-  const [hideDecimal, setScrollYCurrent] = useHidingHeader(50);
-  const [logs, setLogs] = useState<DevLog[]>([]);
-  const [page, setPage] = useState<number>(0);
-  const scrollEl = useRef<HTMLIonInfiniteScrollElement>(null);
+  const content = useRef<any>()
+  const [prompt, promptToInstall] = useAddToHomescreenPrompt()
+  const [hideDecimal, setScrollYCurrent] = useHidingHeader(50)
+  const [logs, setLogs] = useState<DevLog[]>([])
+  const [page, setPage] = useState<number>(0)
+  const scrollEl = useRef<HTMLIonInfiniteScrollElement>(null)
 
   const {
     homeData,
@@ -75,40 +76,40 @@ const Home: React.FC = () => {
       status,
     }),
     shallowEqual
-  );
-  const dispatch = useDispatch();
+  )
+  const dispatch = useDispatch()
   const getHomeData = useCallback(() => dispatch(thunkGetHomeData()), [
     dispatch,
-  ]);
+  ])
   const getFollowedDevLogs = useCallback(
     (page: number) => dispatch(thunkLoadFollowedDevLogs(page)),
     [dispatch]
-  );
+  )
   const setDarkMode = useCallback(
     (active: boolean) => dispatch(thunkSetDarkMode(active)),
     [dispatch]
-  );
+  )
 
   useIonViewDidEnter(() => {
-    getHomeData();
+    getHomeData()
     if (isLoggedIn) {
-      getFollowedDevLogs(page);
+      getFollowedDevLogs(page)
     } else {
-      (async () => {
-        const resp = await (await Axios()).get(`public/log/feed/${page}`);
-        setLogs(resp.data as DevLog[]);
-      })();
+      ;(async () => {
+        const resp = await (await Axios()).get(`public/log/feed/${page}`)
+        setLogs(resp.data as DevLog[])
+      })()
     }
-  }, [isLoggedIn]);
+  }, [isLoggedIn])
 
   useIonViewDidLeave(() => {
-    setLogs([]);
-    setPage(0);
-  });
+    setLogs([])
+    setPage(0)
+  })
 
   useEffect(() => {
-    ReactGA.pageview(`Home`);
-  }, []);
+    ReactGA.pageview(`Home`)
+  }, [])
 
   const renderHomeList = useMemo(() => {
     return (
@@ -135,8 +136,8 @@ const Home: React.FC = () => {
           isLoading={isLoading}
         />
       </div>
-    );
-  }, [homeData, isLoading]);
+    )
+  }, [homeData, isLoading])
 
   const renderHeader = useMemo(() => {
     return (
@@ -159,8 +160,8 @@ const Home: React.FC = () => {
           </div>
         </div>
       </HidingHeader>
-    );
-  }, [hideDecimal, promptToInstall, prompt, darkMode]);
+    )
+  }, [hideDecimal, promptToInstall, prompt, darkMode])
 
   return (
     <IonPage>
@@ -177,10 +178,15 @@ const Home: React.FC = () => {
           <IonCol className="AppsCol" size="12">
             {renderHomeList}
           </IonCol>
+          <a href="https://www.patreon.com/pwastore" className="FooterNote">
+            <IonNote >
+              Help keep our server running! Please support us on Patreon <IonIcon icon={heart}/>
+            </IonNote>
+          </a>
         </IonRow>
       </IonContent>
     </IonPage>
-  );
-};
+  )
+}
 
-export default memo(Home);
+export default memo(Home)
